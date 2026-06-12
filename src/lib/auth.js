@@ -6,6 +6,9 @@ const BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 // VITE_META_APP_ID    → your Meta app ID
 // VITE_OAUTH_REDIRECT → must match the redirect URI whitelisted in the Meta app
 const META_APP_ID = import.meta.env.VITE_META_APP_ID || ''
+// Business-type Meta apps use "Facebook Login for Business" which requires a
+// configuration ID (create one under Facebook Login for Business → Configurations)
+const META_CONFIG_ID = import.meta.env.VITE_META_CONFIG_ID || ''
 const REDIRECT_URI = import.meta.env.VITE_OAUTH_REDIRECT || window.location.origin
 
 // Scopes needed for comment automation + DM sequences
@@ -32,10 +35,12 @@ export const auth = {
     const params = new URLSearchParams({
       client_id: META_APP_ID,
       redirect_uri: REDIRECT_URI,
-      scope: SCOPES,
       response_type: 'code',
       state,
     })
+    // Business apps: config_id replaces scope (permissions live in the configuration)
+    if (META_CONFIG_ID) params.set('config_id', META_CONFIG_ID)
+    else params.set('scope', SCOPES)
     return `https://www.facebook.com/v21.0/dialog/oauth?${params}`
   },
 
