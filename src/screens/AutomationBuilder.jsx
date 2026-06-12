@@ -188,11 +188,11 @@ export default function AutomationBuilder({ initialConfig, posts, onBack, onSave
   return (
     <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', flexDirection: 'column' }}>
       {/* Top bar */}
-      <header style={{
+      <header className="builder-header" style={{
         position: 'sticky', top: 0, zIndex: 50,
         background: 'rgba(8,8,8,0.95)', backdropFilter: 'blur(20px)',
         borderBottom: '1px solid #141414',
-        padding: '0 24px', height: 60,
+        height: 60,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1, minWidth: 0 }}>
@@ -213,6 +213,7 @@ export default function AutomationBuilder({ initialConfig, posts, onBack, onSave
           <div style={{ width: 1, height: 20, background: '#1e1e1e' }} />
 
           <input
+            className="builder-name-input"
             value={config.name}
             onChange={(e) => updateConfig({ name: e.target.value })}
             style={{
@@ -252,7 +253,7 @@ export default function AutomationBuilder({ initialConfig, posts, onBack, onSave
           </AnimatePresence>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', borderLeft: '1px solid #1a1a1a' }}>
-            <span style={{ fontSize: 12, color: '#555' }}>{config.active ? 'Active' : 'Inactive'}</span>
+            <span className="builder-toggle-label" style={{ fontSize: 12, color: '#555' }}>{config.active ? 'Active' : 'Inactive'}</span>
             <Toggle checked={config.active} onChange={handleToggleActive} size="sm" />
           </div>
 
@@ -276,12 +277,36 @@ export default function AutomationBuilder({ initialConfig, posts, onBack, onSave
         </div>
       </header>
 
+      {/* Mobile step tabs (shown on small screens instead of sidebar) */}
+      <div className="builder-step-tabs">
+        {STEPS.map((step, i) => {
+          const Icon = step.icon
+          const isActive = activeStep === step.id
+          return (
+            <button
+              key={step.id}
+              type="button"
+              onClick={() => setActiveStep(step.id)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '6px 12px', borderRadius: 20, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0,
+                background: isActive ? 'rgba(124,58,237,0.2)' : '#161616',
+                color: isActive ? '#8b5cf6' : '#555',
+                fontSize: 12, fontWeight: isActive ? 600 : 400,
+              }}
+            >
+              <Icon size={12} /> {step.label}
+            </button>
+          )
+        })}
+      </div>
+
       {/* Body */}
       <div style={{ display: 'flex', flex: 1 }}>
 
         {/* Left sidebar — sticky, page scrolls */}
-        <aside style={{
-          width: 220, flexShrink: 0,
+        <aside className="builder-aside" style={{
+          flexShrink: 0,
           borderRight: '1px solid #111',
           padding: '24px 12px',
           position: 'sticky',
@@ -289,6 +314,7 @@ export default function AutomationBuilder({ initialConfig, posts, onBack, onSave
           alignSelf: 'flex-start',
           height: 'calc(100vh - 60px)',
           overflowY: 'auto',
+          flexDirection: 'column',
         }}>
           <div style={{ fontSize: 11, color: '#444', marginBottom: 12, paddingLeft: 14, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
             Setup Steps
@@ -301,7 +327,7 @@ export default function AutomationBuilder({ initialConfig, posts, onBack, onSave
         </aside>
 
         {/* Main content — no inner scroll, page scrolls naturally */}
-        <main style={{ flex: 1, padding: '40px 48px', maxWidth: 700 }}>
+        <main className="builder-main" style={{ flex: 1, maxWidth: 700 }}>
 
           {/* Step progress */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 32 }}>

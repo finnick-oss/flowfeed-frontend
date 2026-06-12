@@ -21,3 +21,81 @@ input, textarea, select {
 }
 
 button { cursor: pointer; font-family: inherit; }
+
+/* ── Responsive layout helpers ── */
+
+/* Dashboard header */
+.dash-header { padding: 0 32px; }
+.dash-header-badge { display: flex; }
+.dash-create-btn span { display: inline; }
+
+/* Dashboard main */
+.dash-main { padding: 36px 32px; }
+
+/* Stats grid */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+/* Automation card header */
+.card-header-actions { display: flex; }
+.card-badge { display: flex; }
+
+/* Builder header */
+.builder-header { padding: 0 24px; }
+.builder-name-input { display: block; }
+.builder-toggle-label { display: inline; }
+
+/* Builder body */
+.builder-aside { display: flex; width: 220px; }
+.builder-main { padding: 40px 48px; }
+
+/* Footer */
+.footer-inner { flex-direction: row; }
+
+/* ── Tablet (≤ 768px) ── */
+@media (max-width: 768px) {
+  .dash-header { padding: 0 16px; }
+  .dash-header-badge { display: none; }
+  .dash-main { padding: 24px 16px; }
+
+  .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 24px; }
+
+  .builder-header { padding: 0 16px; gap: 8px; }
+  .builder-name-input { max-width: 120px; }
+  .builder-toggle-label { display: none; }
+
+  .builder-aside { display: none; }
+  .builder-main { padding: 24px 20px; max-width: 100% !important; }
+
+  .footer-inner { flex-direction: column; gap: 6px; align-items: flex-start; }
+}
+
+/* ── Mobile (≤ 480px) ── */
+@media (max-width: 480px) {
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+
+  .card-badge { display: none; }
+
+  .dash-create-btn span { display: none; }
+
+  .builder-name-input { max-width: 80px; font-size: 13px !important; }
+}
+
+/* Builder mobile step nav (shown when aside is hidden) */
+.builder-step-tabs {
+  display: none;
+  overflow-x: auto;
+  gap: 6px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #141414;
+  background: #080808;
+  scrollbar-width: none;
+}
+.builder-step-tabs::-webkit-scrollbar { display: none; }
+@media (max-width: 768px) {
+  .builder-step-tabs { display: flex; }
+}

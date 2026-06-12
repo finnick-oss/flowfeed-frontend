@@ -2,16 +2,15 @@ export default function Footer({ onPrivacy }) {
   return (
     <footer style={{
       borderTop: '1px solid #111',
-      padding: '14px 32px',
+      padding: '14px 20px',
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
       background: '#080808',
       flexShrink: 0,
       marginTop: 'auto',
     }}>
+      <div className="footer-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
       <span style={{ fontSize: 11, color: '#333' }}>
-        © 2026 InstaBot · Created by{' '}
+        © 2026 FlowFeed · Created by{' '}
         <a
           href="https://instagram.com/whoanuragbhatt"
           target="_blank"
@@ -28,6 +27,7 @@ export default function Footer({ onPrivacy }) {
       >
         Privacy Policy
       </button>
+      </div>
     </footer>
   )
 }

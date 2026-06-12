@@ -96,8 +96,9 @@ function AutomationCard({ automation, onEdit, onDelete, onToggle, index }) {
           {/* Active badge */}
           <motion.div
             animate={{ opacity: 1 }}
+            className="card-badge"
             style={{
-              display: 'flex', alignItems: 'center', gap: 5,
+              alignItems: 'center', gap: 5,
               padding: '4px 10px', borderRadius: 20,
               background: isActive ? 'rgba(34,197,94,0.1)' : '#1a1a1a',
               border: `1px solid ${isActive ? 'rgba(34,197,94,0.25)' : '#252525'}`,
@@ -200,11 +201,11 @@ export default function Dashboard({ automations, stats, onCreateNew, onEdit, onD
   return (
     <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', flexDirection: 'column' }}>
       {/* Top nav */}
-      <header style={{
+      <header className="dash-header" style={{
         position: 'sticky', top: 0, zIndex: 50,
         background: 'rgba(8,8,8,0.85)', backdropFilter: 'blur(20px)',
         borderBottom: '1px solid #141414',
-        padding: '0 32px', height: 60,
+        height: 60,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -215,7 +216,7 @@ export default function Dashboard({ automations, stats, onCreateNew, onEdit, onD
           }}>
             <Zap size={16} color="#fff" />
           </div>
-          <span style={{ fontSize: 15, fontWeight: 600, color: '#fff' }}>InstaBot</span>
+          <span style={{ fontSize: 15, fontWeight: 600, color: '#fff' }}>FlowFeed</span>
           <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: '#1a1a1a', color: '#555', border: '1px solid #222' }}>
             Dashboard
           </span>
@@ -226,7 +227,8 @@ export default function Dashboard({ automations, stats, onCreateNew, onEdit, onD
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 20, background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}
+              className="dash-header-badge"
+            style={{ alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 20, background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}
             >
               <motion.span
                 animate={{ scale: [1, 1.4, 1] }}
@@ -237,6 +239,7 @@ export default function Dashboard({ automations, stats, onCreateNew, onEdit, onD
             </motion.div>
           )}
           <motion.button
+            className="dash-create-btn"
             whileHover={{ scale: 1.02, background: '#6d28d9' }}
             whileTap={{ scale: 0.97 }}
             type="button"
@@ -248,12 +251,12 @@ export default function Dashboard({ automations, stats, onCreateNew, onEdit, onD
               color: '#fff', fontSize: 13, fontWeight: 500, cursor: 'pointer'
             }}
           >
-            <Plus size={15} /> Create Auto DM
+            <Plus size={15} /> <span>Create Auto DM</span>
           </motion.button>
         </div>
       </header>
 
-      <main style={{ maxWidth: 1100, margin: '0 auto', padding: '36px 32px', flex: 1, width: '100%' }}>
+      <main className="dash-main" style={{ maxWidth: 1100, margin: '0 auto', flex: 1, width: '100%' }}>
 
         {/* Page title */}
         <motion.div
@@ -269,7 +272,7 @@ export default function Dashboard({ automations, stats, onCreateNew, onEdit, onD
         </motion.div>
 
         {/* Stats row */}
-        <div style={{ display: 'flex', gap: 12, marginBottom: 40, flexWrap: 'wrap' }}>
+        <div className="stats-row">
           {STAT_CARDS.map((stat, i) => (
             <StatCard key={stat.key} stat={stat} value={stats[stat.key]} index={i} />
           ))}

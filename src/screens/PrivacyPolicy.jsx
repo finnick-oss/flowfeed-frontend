@@ -43,7 +43,7 @@ export default function PrivacyPolicy({ onBack }) {
           {[
             {
               title: '1. Information We Collect',
-              body: 'InstaBot collects Instagram user IDs, usernames, and comment text from users who interact with posts where this automation is active. This data is used solely to send automated replies and direct messages on behalf of the account owner.',
+              body: 'FlowFeed collects Instagram user IDs, usernames, and comment text from users who interact with posts where this automation is active. This data is used solely to send automated replies and direct messages on behalf of the account owner.',
             },
             {
               title: '2. How We Use Your Information',

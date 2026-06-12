@@ -1,4 +1,4 @@
-# InstaBot Frontend
+# FlowFeed Frontend
 
 React admin dashboard for managing Instagram comment automation, DM sequences, and viewing interaction stats.
 
