@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import Splash from './screens/Splash'
+import SignIn from './screens/SignIn'
 import Dashboard from './screens/Dashboard'
 import AutomationBuilder from './screens/AutomationBuilder'
 import PrivacyPolicy from './screens/PrivacyPolicy'
 import { api } from './lib/api'
+import { auth } from './lib/auth'
 
 export const DEFAULT_CONFIG = {
   id: null,
@@ -32,13 +35,48 @@ export const DEFAULT_CONFIG = {
 }
 
 export default function App() {
+  // splash → signin → app
+  const [phase, setPhase] = useState('splash')
+  const [session, setSession] = useState(() => auth.getSession())
   const [screen, setScreen] = useState('dashboard')
   const [editingConfig, setEditingConfig] = useState(null)
   const [automations, setAutomations] = useState([])
   const [stats, setStats] = useState({ comments_replied: 0, dms_sent: 0, clicks: 0, followers_gained: 0, emails_saved: 0 })
   const [posts, setPosts] = useState([])
 
+  // Handle return from Meta OAuth (?code=...)
   useEffect(() => {
+    const code = auth.getCallbackCode()
+    if (code) {
+      auth.completeLogin(code).then(result => {
+        if (result.success) {
+          setSession(result.session)
+          setPhase('app')
+        } else {
+          setPhase('signin')
+        }
+      })
+    }
+  }, [])
+
+  const handleSplashDone = () => {
+    setPhase(session ? 'app' : 'signin')
+  }
+
+  const handleSignedIn = (newSession) => {
+    setSession(newSession)
+    setPhase('app')
+  }
+
+  const handleLogout = () => {
+    auth.logout()
+    setSession(null)
+    setScreen('dashboard')
+    setPhase('signin')
+  }
+
+  useEffect(() => {
+    if (phase !== 'app') return
     api.fetchStats().then(setStats)
     api.fetchPosts().then(setPosts)
     api.fetchConfig().then(saved => {
@@ -47,7 +85,7 @@ export default function App() {
         setAutomations([{ ...saved, name: saved.name || 'My Automation', id: saved.id || '1' }])
       }
     })
-  }, [])
+  }, [phase])
 
   const openCreate = () => {
     setEditingConfig({ ...DEFAULT_CONFIG, id: Date.now().toString() })
@@ -88,6 +126,26 @@ export default function App() {
     exit: (dir) => ({ opacity: 0, x: dir > 0 ? -40 : 40 }),
   }
 
+  if (phase === 'splash') {
+    return <Splash onDone={handleSplashDone} />
+  }
+
+  if (phase === 'signin') {
+    return (
+      <AnimatePresence mode="wait">
+        {screen === 'privacy' ? (
+          <motion.div key="privacy" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.22 }}>
+            <PrivacyPolicy onBack={() => setScreen('dashboard')} />
+          </motion.div>
+        ) : (
+          <motion.div key="signin" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+            <SignIn onSignedIn={handleSignedIn} onPrivacy={() => setScreen('privacy')} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    )
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#080808', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
       <AnimatePresence mode="wait">
@@ -101,6 +159,8 @@ export default function App() {
               onDelete={handleDelete}
               onToggleActive={handleToggleActive}
               onPrivacy={() => setScreen('privacy')}
+              session={session}
+              onLogout={handleLogout}
             />
           </motion.div>
         )}

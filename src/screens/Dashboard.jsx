@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react'
-import { Plus, MessageCircle, Send, MousePointerClick, UserPlus, Mail, Zap, Trash2, Edit3, Activity } from 'lucide-react'
+import { Plus, MessageCircle, Send, MousePointerClick, UserPlus, Mail, Zap, Trash2, Edit3, Activity, AtSign, LogOut } from 'lucide-react'
 import Footer from '../components/Footer'
 
 const STAT_CARDS = [
@@ -195,7 +195,7 @@ function AutomationCard({ automation, onEdit, onDelete, onToggle, index }) {
   )
 }
 
-export default function Dashboard({ automations, stats, onCreateNew, onEdit, onDelete, onToggleActive, onPrivacy }) {
+export default function Dashboard({ automations, stats, onCreateNew, onEdit, onDelete, onToggleActive, onPrivacy, session, onLogout }) {
   const activeCount = automations.filter(a => a.active).length
 
   return (
@@ -253,6 +253,30 @@ export default function Dashboard({ automations, stats, onCreateNew, onEdit, onD
           >
             <Plus size={15} /> <span>Create Auto DM</span>
           </motion.button>
+
+          {session && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 10, borderLeft: '1px solid #1a1a1a' }}>
+              <div className="dash-header-badge" style={{ alignItems: 'center', gap: 6 }}>
+                <AtSign size={13} color="#8b5cf6" />
+                <span style={{ fontSize: 12, color: '#888' }}>@{session.username}</span>
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.05, color: '#ef4444' }}
+                whileTap={{ scale: 0.95 }}
+                type="button"
+                onClick={onLogout}
+                title="Sign out"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 30, height: 30, borderRadius: 8,
+                  background: '#161616', border: '1px solid #222',
+                  color: '#555', cursor: 'pointer',
+                }}
+              >
+                <LogOut size={13} />
+              </motion.button>
+            </div>
+          )}
         </div>
       </header>
 
